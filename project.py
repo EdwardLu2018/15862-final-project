@@ -3,6 +3,7 @@ import numpy as np
 from scipy import signal
 from sklearn.feature_extraction import image
 from matplotlib import pyplot as plt
+from tqdm import tqdm
 
 from cp_hw2 import lRGB2XYZ
 
@@ -34,7 +35,7 @@ def specular_warp(I_tar, I_ref, num_corres, patch_size):
 
     pts_src = np.zeros((num_corres,2))
     pts_dst = np.zeros((num_corres,2))
-    for i in range(num_corres):
+    for i in tqdm(range(num_corres)):
         y1 = np.random.randint(I_ref.shape[0] - patch_size)
         x1 = np.random.randint(I_ref.shape[1] - patch_size)
         patch = I_ref[y1:y1+patch_size, x1:x1+patch_size]
@@ -67,7 +68,7 @@ def create_similarity_map(I_tar, I_ref, patch_size):
     d = patch_size // 2
 
     S = np.zeros(I_tar.shape)
-    for i in range(d, I_tar.shape[0] - (d + 1)):
+    for i in tqdm(range(d, I_tar.shape[0] - (d + 1))):
         for j in range(d, I_tar.shape[1] - (d + 1)):
             tar = I_tar[i - d: i + d + 1,
                         j - d: j + d + 1]
@@ -81,15 +82,15 @@ def create_similarity_map(I_tar, I_ref, patch_size):
 
 if __name__ == "__main__":
     N = 1
-    trial = "trial1"
+    trial = "trial5"
 
     I_tar = read_lum(f"data/{trial}/img_1.tiff", N)
     I_ref = read_lum(f"data/{trial}/img_3.tiff", N)
-    save_image(f"data/{trial}/I_tar.png", I_tar)
-    save_image(f"data/{trial}/I_ref.png", I_ref)
+    save_image(f"data/{trial}/I_tar_{trial}.png", I_tar)
+    save_image(f"data/{trial}/I_ref_{trial}.png", I_ref)
 
     I_ref_w = specular_warp(I_tar, I_ref, num_corres=100, patch_size=50)
-    save_image(f"data/{trial}/I_ref_w.png", I_ref_w)
+    save_image(f"data/{trial}/I_ref_w_{trial}.png", I_ref_w)
 
-    S = create_similarity_map(I_tar, I_ref, patch_size=21)
-    save_image(f"data/{trial}/S.png", S)
+    S = create_similarity_map(I_tar, I_ref_w, patch_size=21)
+    save_image(f"data/{trial}/S_{trial}.png", S)
