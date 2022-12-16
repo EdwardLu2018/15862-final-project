@@ -57,8 +57,8 @@ def specular_warp(I_tar, I_ref, num_corres, patch_size):
 def NCC(a, b):
     a = a.flatten()
     b = b.flatten()
-    a = (a - np.mean(a)) / np.std(a - np.mean(a))
-    b = (b - np.mean(b)) / np.std(b - np.mean(b))
+    a = (a - np.mean(a)) / (np.std(a - np.mean(a)) + 0.001)
+    b = (b - np.mean(b)) / (np.std(b - np.mean(b)) + 0.001)
     # c = np.sum(a*b) / np.sqrt(np.sum(a**2)*np.sum(b**2))
     # c = np.max(signal.correlate2d(a, b, mode="same"))
     ncc = np.correlate(a,b)
@@ -82,7 +82,7 @@ def create_similarity_map(I_tar, I_ref, patch_size):
 
 if __name__ == "__main__":
     N = 1
-    trial = "trial5"
+    trial = "trial1"
 
     I_tar = read_lum(f"data/{trial}/img_1.tiff", N)
     I_ref = read_lum(f"data/{trial}/img_3.tiff", N)
