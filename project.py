@@ -2,10 +2,12 @@ import cv2
 import numpy as np
 from scipy import signal
 from sklearn.feature_extraction import image
-from matplotlib import pyplot as plt
 from tqdm import tqdm
 
 from cp_hw2 import lRGB2XYZ
+
+N = 1
+trial = "trial1"
 
 def read_rgb(path, N=1):
     I = cv2.imread(path)
@@ -81,9 +83,6 @@ def create_similarity_map(I_tar, I_ref, patch_size):
     return S
 
 if __name__ == "__main__":
-    N = 1
-    trial = "trial1"
-
     I_tar = read_lum(f"data/{trial}/img_1.tiff", N)
     I_ref = read_lum(f"data/{trial}/img_3.tiff", N)
     save_image(f"data/{trial}/I_tar_{trial}.png", I_tar)
